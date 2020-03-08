@@ -1,7 +1,6 @@
 package org.wannagoframework.baseserver.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
@@ -14,7 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @version 1.0
  * @since 10/21/19
  */
-@Configuration
+//@Configuration
 public class ChainedTransactionConfiguration {
 
   private MongoTransactionManager nosqlTransactionManager;

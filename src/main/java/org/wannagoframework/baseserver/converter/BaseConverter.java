@@ -18,11 +18,11 @@
 
 package org.wannagoframework.baseserver.converter;
 
-import com.google.maps.model.LatLng;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.wannagoframework.baseserver.domain.graphdb.Comment;
 import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.BaseEntity;
 import org.wannagoframework.dto.domain.EntityTranslation;
@@ -33,25 +33,30 @@ import org.wannagoframework.dto.domain.EntityTranslation;
  * @since 2019-06-05
  */
 @Component
-public class UtilsConverter {
+public class BaseConverter {
 
   private final OrikaBeanMapper orikaBeanMapper;
 
-  public UtilsConverter(OrikaBeanMapper orikaBeanMapper) {
+  public BaseConverter(OrikaBeanMapper orikaBeanMapper) {
     this.orikaBeanMapper = orikaBeanMapper;
   }
 
   @Bean
-  public void utilsConverters() {
+  public void baseConverters() {
+    orikaBeanMapper.addMapper(Comment.class, org.wannagoframework.dto.domain.Comment.class);
+    orikaBeanMapper.addMapper(org.wannagoframework.dto.domain.Comment.class, Comment.class);
+
     orikaBeanMapper
         .addMapper(EntityTranslation.class, EntityTranslation.class);
     orikaBeanMapper
         .addMapper(EntityTranslation.class, EntityTranslation.class);
 
     orikaBeanMapper
-        .addMapper(org.wannagoframework.baseserver.domain.graphdb.BaseEntity.class, BaseEntity.class);
+        .addMapper(org.wannagoframework.baseserver.domain.graphdb.BaseEntity.class,
+            BaseEntity.class);
     orikaBeanMapper
-        .addMapper(org.wannagoframework.baseserver.domain.nosqldb.BaseEntity.class, BaseEntity.class);
+        .addMapper(org.wannagoframework.baseserver.domain.nosqldb.BaseEntity.class,
+            BaseEntity.class);
     orikaBeanMapper
         .addMapper(org.wannagoframework.baseserver.domain.relationaldb.BaseEntity.class, BaseEntity.class);
 
