@@ -20,7 +20,7 @@ import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
 /**
- * @author Alexandre Clavaud.
+ * @author WannaGo Dev1.
  * @version 1.0
  * @since 2/25/20
  */
