@@ -26,6 +26,7 @@ import org.wannagoframework.baseserver.domain.graphdb.Comment;
 import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.BaseEntity;
 import org.wannagoframework.dto.domain.EntityTranslation;
+import org.wannagoframework.dto.utils.StoredFile;
 
 /**
  * @author WannaGo Dev1.
@@ -101,5 +102,7 @@ public class BaseConverter {
             }
           }
         }).register();
+
+    orikaBeanMapper.addMapper(StoredFile.class, StoredFile.class);
   }
 }
