@@ -196,6 +196,7 @@
       <groupId>com.github.mongobee</groupId>
       <artifactId>mongobee</artifactId>
       <version>${mongobee.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Jackson dependency -->
