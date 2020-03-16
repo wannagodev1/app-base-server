@@ -51,9 +51,9 @@
 
     <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
     <spring-data.version>Lovelace-SR10</spring-data.version>
-    <spring-boot-admin.version>2.2.1</spring-boot-admin.version>
+    <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
 
-    <javamelody.version>1.81.0</javamelody.version>
+    <javamelody.version>1.82.0</javamelody.version>
 
     <neo4j.version>3.5.9</neo4j.version>
     <neo4j-spatial.version>0.26.2-neo4j-3.5.2</neo4j-spatial.version>
@@ -70,7 +70,7 @@
     <orika-core.version>1.5.4</orika-core.version>
 
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-    <glowroot-agent-api.version>0.13.5</glowroot-agent-api.version>
+    <glowroot-agent-api.version>0.13.6</glowroot-agent-api.version>
     <problem-spring-web.version>0.25.0</problem-spring-web.version>
 
     <hazelcast-docker-swarm.version>1.0-RC14</hazelcast-docker-swarm.version>
@@ -319,10 +319,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
-    <!--dependency>
+    <dependency>
       <groupId>de.codecentric</groupId>
       <artifactId>spring-boot-admin-starter-client</artifactId>
-    </dependency-->
+    </dependency>
     <dependency>
       <groupId>org.glowroot</groupId>
       <artifactId>glowroot-agent-api</artifactId>
