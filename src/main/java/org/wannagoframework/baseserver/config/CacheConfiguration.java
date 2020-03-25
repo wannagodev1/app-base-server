@@ -29,7 +29,6 @@ import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.config.MemberAddressProviderConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import org.bitsofinfo.hazelcast.discovery.docker.swarm.SwarmMemberAddressProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -134,14 +133,16 @@ public class CacheConfiguration implements DisposableBean {
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
 
-        DiscoveryStrategyConfig discoveryStrategyConfig = new DiscoveryStrategyConfig(
-            "org.bitsofinfo.hazelcast.discovery.docker.swarm.DockerSwarmDiscoveryStrategy");
-        discoveryStrategyConfig
-            .addProperty("docker-network-names", env.getProperty("dockerNetworkNames"));
-        discoveryStrategyConfig
-            .addProperty("docker-service-names", env.getProperty("dockerServiceNames"));
-        discoveryStrategyConfig
-            .addProperty("hazelcast-peer-port", env.getProperty("hazelcastPeerPort"));
+        config.getNetworkConfig().getJoin().getEurekaConfig().setEnabled(true)
+            .setProperty("self-registration", "true")
+            .setProperty("namespace", "hazelcast")
+            .setProperty("use-metadata-for-host-and-port", "true");
+
+        /*
+       DiscoveryStrategyConfig discoveryStrategyConfig = new DiscoveryStrategyConfig("org.bitsofinfo.hazelcast.discovery.docker.swarm.DockerSwarmDiscoveryStrategy");
+       discoveryStrategyConfig.addProperty("docker-network-names", env.getProperty("dockerNetworkNames"));
+       discoveryStrategyConfig.addProperty("docker-service-names", env.getProperty("dockerServiceNames"));
+       discoveryStrategyConfig.addProperty("hazelcast-peer-port", env.getProperty("hazelcastPeerPort"));
 
         DiscoveryConfig discoveryConfig = new DiscoveryConfig();
         discoveryConfig.addDiscoveryStrategyConfig(discoveryStrategyConfig);
@@ -157,6 +158,7 @@ public class CacheConfiguration implements DisposableBean {
         memberAddressProviderConfig.setImplementation(memberAddressProvider);
 
         config.getNetworkConfig().setMemberAddressProviderConfig(memberAddressProviderConfig);
+         */
 
       } else { // Production configuration, one host per instance all using port 5701
         config.getNetworkConfig().setPort(5701);
