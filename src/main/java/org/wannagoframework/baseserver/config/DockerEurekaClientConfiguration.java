@@ -46,7 +46,8 @@ import org.wannagoframework.commons.utils.SpringProfileConstants;
 @Profile({SpringProfileConstants.SPRING_PROFILE_STAGING,
     SpringProfileConstants.SPRING_PROFILE_PRODUCTION})
 @Configuration
-public class DockerEurekaClientConfiguration implements
+public class
+DockerEurekaClientConfiguration implements
     HasLogger {
 
   private final ConfigurableEnvironment env;

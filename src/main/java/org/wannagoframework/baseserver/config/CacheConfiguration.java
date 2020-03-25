@@ -123,7 +123,7 @@ public class CacheConfiguration implements DisposableBean {
           config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
         }
       } else if (env
-          .acceptsProfiles(Profiles.of(SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_GCP))) {
+          .acceptsProfiles(Profiles.of(SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_GCP,SpringProfileConstants.SPRING_PROFILE_STAGING)) ) {
         log.debug(
             "Application is running with the \"devgcp\" profile, Hazelcast cluster will use swarm discovery");
 
