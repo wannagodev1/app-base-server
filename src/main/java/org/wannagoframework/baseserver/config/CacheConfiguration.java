@@ -19,16 +19,15 @@
 package org.wannagoframework.baseserver.config;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.config.DiscoveryConfig;
-import com.hazelcast.config.DiscoveryStrategyConfig;
 import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.config.ManagementCenterConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MaxSizeConfig;
-import com.hazelcast.config.MemberAddressProviderConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.eureka.one.EurekaOneDiscoveryStrategyFactory;
+import com.netflix.discovery.EurekaClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -57,13 +56,16 @@ public class CacheConfiguration implements DisposableBean {
 
   private final DiscoveryClient discoveryClient;
 
+  private final EurekaClient eurekaClient;
+
   private Registration registration;
 
   public CacheConfiguration(Environment env, ServerProperties serverProperties,
-      DiscoveryClient discoveryClient) {
+      DiscoveryClient discoveryClient, EurekaClient eurekaClient) {
     this.env = env;
     this.serverProperties = serverProperties;
     this.discoveryClient = discoveryClient;
+    this.eurekaClient = eurekaClient;
   }
 
   @Autowired(required = false)
@@ -122,7 +124,7 @@ public class CacheConfiguration implements DisposableBean {
           config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
         }
       } else if (env
-          .acceptsProfiles(Profiles.of(SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_GCP,SpringProfileConstants.SPRING_PROFILE_STAGING)) ) {
+          .acceptsProfiles(Profiles.of(SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_GCP,SpringProfileConstants.SPRING_PROFILE_STAGING, SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_LOCAL_EUREKA)) ) {
         log.debug(
             "Application is running with the \"devgcp\" profile, Hazelcast cluster will use swarm discovery");
 
@@ -132,6 +134,8 @@ public class CacheConfiguration implements DisposableBean {
 
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+
+        EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
 
         config.getNetworkConfig().getJoin().getEurekaConfig().setEnabled(true)
             .setProperty("self-registration", "true")
