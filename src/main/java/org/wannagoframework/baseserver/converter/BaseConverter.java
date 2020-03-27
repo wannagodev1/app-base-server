@@ -107,7 +107,7 @@ public class BaseConverter {
 
     orikaBeanMapper.addMapper(PageImpl.class, Page.class);
     orikaBeanMapper.addMapper(Page.class, PageImpl.class);
-    
+
     orikaBeanMapper.addMapper(StoredFile.class, StoredFile.class);
   }
 }
