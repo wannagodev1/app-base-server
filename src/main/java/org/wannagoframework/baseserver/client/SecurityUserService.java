@@ -37,7 +37,7 @@ import org.wannagoframework.dto.utils.Page;
  * @version 1.0
  * @since 2019-04-16
  */
-@FeignClient(name = "${app.remote-services.authorization-server.name:null}", url = "${app.remote-services.authorization-server.url:}", path = "/securityUser", fallbackFactory = SecurityUserServiceFallback.class)
+@FeignClient(name = "${app.remote-services.authorization-server.name:null}", url = "${app.remote-services.authorization-server.url:}", path = "/uaa/securityUser", fallbackFactory = SecurityUserServiceFallback.class)
 @Primary
 public interface SecurityUserService {
 

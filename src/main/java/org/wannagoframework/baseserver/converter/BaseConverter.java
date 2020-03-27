@@ -21,11 +21,13 @@ package org.wannagoframework.baseserver.converter;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MappingContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.wannagoframework.baseserver.domain.graphdb.Comment;
 import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.BaseEntity;
 import org.wannagoframework.dto.domain.EntityTranslation;
+import org.wannagoframework.dto.utils.Page;
 import org.wannagoframework.dto.utils.StoredFile;
 
 /**
@@ -103,6 +105,9 @@ public class BaseConverter {
           }
         }).register();
 
+    orikaBeanMapper.addMapper(PageImpl.class, Page.class);
+    orikaBeanMapper.addMapper(Page.class, PageImpl.class);
+    
     orikaBeanMapper.addMapper(StoredFile.class, StoredFile.class);
   }
 }
