@@ -21,8 +21,6 @@ package org.wannagoframework.baseserver.config;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.RequestInterceptor;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,9 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 @Configuration
 @EnableResourceServer
@@ -152,16 +153,19 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   @Override
   public void configure(HttpSecurity http) throws Exception {
     http.headers().frameOptions().sameOrigin();
+//    http.cors().disable();
+
     http.csrf().disable();
     http.authorizeRequests()
-        .antMatchers("/ping").permitAll()
-        .antMatchers("/h2-console/**").permitAll()
-        .antMatchers("/actuator/health").permitAll()
-        .antMatchers("/actuator/info").permitAll()
-        .antMatchers("/actuator/prometheus").permitAll()
-        .antMatchers("/actuator/hystrix.stream").permitAll()
-        .antMatchers("/actuator/**").hasAuthority("MONITORING")
-        .antMatchers("/monitoring/**").hasAuthority("MONITORING")
-        .anyRequest().authenticated();
+            .antMatchers("/ping").permitAll()
+            .antMatchers("/h2-console/**").permitAll()
+            .antMatchers("/actuator/health").permitAll()
+            .antMatchers("/actuator/info").permitAll()
+            .antMatchers("/actuator/prometheus").permitAll()
+            .antMatchers("/actuator/hystrix.stream").permitAll()
+            .antMatchers("/actuator/**").hasAuthority("MONITORING")
+            .antMatchers("/monitoring/**").hasAuthority("MONITORING")
+            .anyRequest().authenticated();
+    http.cors();
   }
 }
