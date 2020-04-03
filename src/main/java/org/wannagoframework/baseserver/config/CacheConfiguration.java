@@ -95,10 +95,10 @@ public class CacheConfiguration implements DisposableBean {
       return hazelCastInstance;
     }
     Config config = new Config();
-    config.setInstanceName("backend-server");
+    config.setInstanceName(env.getProperty("spring.application.name"));
 
     GroupConfig groupConfig = new GroupConfig();
-    groupConfig.setName("backend-server");
+    groupConfig.setName(env.getProperty("spring.application.name"));
     config.setGroupConfig(groupConfig);
 
     config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
@@ -121,13 +121,16 @@ public class CacheConfiguration implements DisposableBean {
 
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
 
+/*
         EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
 
         config.getNetworkConfig().getJoin().getEurekaConfig().setEnabled(true)
             .setProperty("self-registration", "true")
             .setProperty("namespace", "hazelcast")
             .setProperty("use-metadata-for-host-and-port", "true");
+ */
       } else if (env
           .acceptsProfiles(Profiles.of(SpringProfileConstants.SPRING_PROFILE_DEVELOPMENT_LOCAL))) {
         log.debug("Application is running with the \"local\" profile, Hazelcast " +

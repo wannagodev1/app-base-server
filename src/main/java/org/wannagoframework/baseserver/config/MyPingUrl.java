@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.wannagoframework.commons.utils.HasLogger;
 
 
 /**
@@ -48,51 +49,48 @@ import org.springframework.boot.json.JsonParserFactory;
  *
  * @author stonse
  */
-public class MyPingUrl implements IPing {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(MyPingUrl.class);
+public class MyPingUrl implements IPing, HasLogger {
 
   public MyPingUrl() {
   }
 
   public boolean isAlive(Server server) {
+    String loggerPrefix = getLoggerPrefix("isAlive", server.getHost());
     boolean isAlive = false;
-    if (server instanceof DiscoveryEnabledServer) {
+    if (server != null && server instanceof DiscoveryEnabledServer) {
       DiscoveryEnabledServer dServer = (DiscoveryEnabledServer) server;
       InstanceInfo instanceInfo = dServer.getInstanceInfo();
       String appName = instanceInfo.getAppName();
       String instanceStatus = instanceInfo.getStatus().toString();
-      if (instanceInfo != null) {
-        String urlStr = instanceInfo.getHealthCheckUrl();
+      String urlStr = instanceInfo.getHealthCheckUrl();
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpUriRequest getRequest = new HttpGet(urlStr);
-        String content = null;
-        try {
-          HttpResponse response = httpClient.execute(getRequest);
-          content = EntityUtils.toString(response.getEntity());
-          LOGGER.trace("content:" + content);
+      HttpClient httpClient = new DefaultHttpClient();
+      HttpUriRequest getRequest = new HttpGet(urlStr);
+      String content = null;
+      try {
+        HttpResponse response = httpClient.execute(getRequest);
+        content = EntityUtils.toString(response.getEntity());
+        logger().trace(loggerPrefix + "content:" + content);
 
-          if (response.getStatusLine().getStatusCode() == 200) {
-            JsonParser springParser = JsonParserFactory.getJsonParser();
-            Map<String, Object> map = springParser.parseMap(content);
-            isAlive = map.get("status").equals("UP");
-            LOGGER.debug(appName + " server OK");
-          } else {
-            LOGGER.debug(appName + " server KO");
-          }
-        } catch (IOException e) {
-          LOGGER
-              .error("IO Exception with server '" + appName + "', instance status is '"
-                  + instanceStatus + "', url = '" + urlStr + "' : " + e.getLocalizedMessage());
-
-        } catch (Exception e) {
-          LOGGER.error(
-              "Unknown Exception with server url " + urlStr + " : " + e.getLocalizedMessage(), e);
-        } finally {
-          // Release the connection.
-          getRequest.abort();
+        if (response.getStatusLine().getStatusCode() == 200) {
+          JsonParser springParser = JsonParserFactory.getJsonParser();
+          Map<String, Object> map = springParser.parseMap(content);
+          isAlive = map.get("status").equals("UP");
+          logger().trace(loggerPrefix + appName + " server OK");
+        } else {
+          logger().trace(loggerPrefix + appName + " server KO");
         }
+      } catch (IOException e) {
+        logger()
+            .error(loggerPrefix + "IO Exception with server '" + appName + "', instance status is '"
+                + instanceStatus + "', url = '" + urlStr + "' : " + e.getLocalizedMessage());
+
+      } catch (Exception e) {
+        logger().error(loggerPrefix +
+            "Unknown Exception with server url " + urlStr + " : " + e.getLocalizedMessage(), e);
+      } finally {
+        // Release the connection.
+        getRequest.abort();
       }
     }
     return isAlive;
