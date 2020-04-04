@@ -72,6 +72,7 @@ public class AppProperties {
   public static class Hazelcast {
 
     private final ManagementCenter managementCenter = new ManagementCenter();
+    private String interfaces;
     private int timeToLiveSeconds = 3600;
     private int backupCount = 1;
 
