@@ -133,7 +133,7 @@ public class DockerEurekaClientConfiguration implements HasLogger {
     EurekaInstanceConfigBean result = null;
     int nbLoop = 1;
     while (result == null) {
-      logger().info(loggerPrefix + "Loop " + nbLoop++);
+      logger().info(loggerPrefix + "Loop : " + nbLoop++);
       try {
         List<String> servers = eurekaClientConfigBean(env).getEurekaServerServiceUrls(null);
         Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
