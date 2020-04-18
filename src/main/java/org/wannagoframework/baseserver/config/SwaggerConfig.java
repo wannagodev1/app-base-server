@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import springfox.documentation.builders.AuthorizationCodeGrantBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -41,33 +42,43 @@ import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 public class SwaggerConfig {
+  private final Environment environment;
 
-  public static final String AUTH_SERVER =
-      "http://localhost:8081/spring-security-oauth-server/oauth";
-  public static final String CLIENT_ID = "fooClientIdPassword";
-  public static final String CLIENT_SECRET = "secret";
+  public final String authServerAccessTokenUri;
+  public final String authServerAuthorizeUri;
+  public final String clientId;
+  public final String clientSecret;
+
+  public SwaggerConfig(Environment environment) {
+    this.environment = environment;
+
+    authServerAccessTokenUri = environment.getProperty("security.oauth2.client.accessTokenUri");
+    authServerAuthorizeUri= environment.getProperty("security.oauth2.client.userAuthorizationUri");
+    clientId = environment.getProperty("security.oauth2.client.clientId");
+    clientSecret = environment.getProperty("security.oauth2.client.clientSecret");
+  }
 
   @Bean
   public Docket api() {
     // @formatter:off
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.wannaenjoy.backend.endpoint"))
+        .apis(RequestHandlerSelectors.basePackage("org.wannagoframework.baseserver.endpoint"))
         .paths(PathSelectors.any())
-        .build();
-    // .securitySchemes( Arrays.asList( securityScheme() ) )
-    // .securityContexts( Arrays.asList( securityContext() ) );
+        .build()
+        .securitySchemes( Arrays.asList( securityScheme() ) )
+        .securityContexts( Arrays.asList( securityContext() ) );
     // @formatter:on
   }
 
   private ApiInfo apiInfo() {
     // @formatter:off
     return new ApiInfo(
-        "Do You Wanna Place REST API",
-        "Rest API documentation for Do You Wanna Place project.",
+        "WannaGO REST API",
+        "Rest API documentation for WannaGo Framework.",
         "API v1.0",
         "Terms of service",
         new Contact("Wannago", "", "Wannago.dev1@gmail.com"),
@@ -80,8 +91,8 @@ public class SwaggerConfig {
   @Bean
   public SecurityConfiguration security() {
     return SecurityConfigurationBuilder.builder()
-        .clientId(CLIENT_ID)
-        .clientSecret(CLIENT_SECRET)
+        .clientId(clientId)
+        .clientSecret(clientSecret)
         .useBasicAuthenticationWithAccessCodeGrant(true)
         .build();
   }
@@ -90,9 +101,9 @@ public class SwaggerConfig {
     // @formatter:off
     GrantType grantType =
         new AuthorizationCodeGrantBuilder()
-            .tokenEndpoint(new TokenEndpoint(AUTH_SERVER + "/token", "oauthtoken"))
+            .tokenEndpoint(new TokenEndpoint(authServerAccessTokenUri, "oauthtoken"))
             .tokenRequestEndpoint(
-                new TokenRequestEndpoint(AUTH_SERVER + "/authorize", CLIENT_ID, CLIENT_ID))
+                new TokenRequestEndpoint(authServerAuthorizeUri, clientId, clientSecret))
             .build();
     // @formatter:on
     return new OAuthBuilder()
@@ -106,7 +117,7 @@ public class SwaggerConfig {
     return SecurityContext.builder()
         .securityReferences(
             Collections.singletonList(new SecurityReference("spring_oauth", scopes())))
-        .forPaths(PathSelectors.regex("/foos.*"))
+        .forPaths(PathSelectors.any())
         .build();
   }
 
