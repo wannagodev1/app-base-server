@@ -85,6 +85,8 @@
 
     <mariadb-java-client.version>2.4.4</mariadb-java-client.version>
     <mongobee.version>0.13</mongobee.version>
+
+    <javers-spring-boot-starter-mongo.version>5.8.13</javers-spring-boot-starter-mongo.version>
   </properties>
 
   <dependencies>
@@ -187,6 +189,12 @@
       <groupId>com.hazelcast</groupId>
       <artifactId>hazelcast-eureka-one</artifactId>
       <version>${hazelcast-eureka.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.javers</groupId>
+      <artifactId>javers-spring-boot-starter-mongo</artifactId>
+      <version>${javers-spring-boot-starter-mongo.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!--dependency>
