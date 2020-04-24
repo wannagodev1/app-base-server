@@ -194,7 +194,6 @@
       <groupId>org.javers</groupId>
       <artifactId>javers-spring-boot-starter-mongo</artifactId>
       <version>${javers-spring-boot-starter-mongo.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <!--dependency>
