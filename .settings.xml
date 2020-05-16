@@ -3,6 +3,16 @@
 <settings>
   <servers>
     <server>
+      <id>nexus-wannaenjoy-snapshots</id>
+      <username>${NEXUS_USERNAME}</username>
+      <password>${NEXUS_PASSWORD}</password>
+    </server>
+    <server>
+      <id>nexus-wannaenjoy-releases</id>
+      <username>${NEXUS_USERNAME}</username>
+      <password>${NEXUS_PASSWORD}</password>
+    </server>
+    <server>
       <id>ossrh</id>
       <username>${ossrh_username}</username>
       <password>${ossrh_password}</password>
