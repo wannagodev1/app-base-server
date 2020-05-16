@@ -47,7 +47,7 @@ public interface CrudNosqldbService<T extends BaseEntity> {
   }
 
   @Transactional
-  default void delete(String id) {
+  default void delete(String id) throws Exception {
     delete(load(id));
   }
 
